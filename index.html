@@ -15,8 +15,19 @@
     background: #333;
     margin:10px;
     padding:10px;
+    width: 100%;
+    height: 100%;
   }
-  
+  #cake-video
+  {
+    position: fixed;
+    left: 5vw;
+    width: 95vw;
+    height: calc(90vh - 50px);
+    top: 5vh;
+    bottom: 50px;
+    
+  }
     #volume-meter {
       width: 400px;
       height: 50px;
@@ -64,13 +75,14 @@
    <div id="intro">
     <img  src="hjalmark.png" width="100%">
   </div>
-  <video id="cake-video" >
+  <video poster id="cake-video" >
     <source src="verjaardag.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 <br>
   <div id="instructies">
       <h1 id="tekst">Blaas de kaarsjes uit!</h1>
+      Windmeter<br>
       <div id="volume-meter">
         <div id="volume-level"></div>
       </div>
@@ -115,12 +127,13 @@
       console.log(isBlowing);
       if (isBlowing) {
         time_blowing++;
-        if(time_blowing%10<5)
+        if(time_blowing%6<3)
         {
           volumeLevel.style.background="#a80";
         }else
         {
           volumeLevel.style.background="#ca8";
+          text.innerHTML="GOEDZO!!!";
           
         }
         console.log(time_blowing);
@@ -129,7 +142,7 @@
       if(time_blowing>0)
       {
         console.log(time_blowing);
-        if(time_blowing<30)
+        if(time_blowing<50)
         {
           text.innerHTML="harder!!!";
         }else
@@ -172,7 +185,7 @@
             rms = Math.sqrt(rms / bufferSize);
             
             // Adjust this threshold value as needed for sensitivity
-            const threshold = 0.25;
+            const threshold = 0.1;
             if (rms > threshold) {
               toggleVideoPlay(true);
             } else {
