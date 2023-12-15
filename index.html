@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Birthday E-card</title>
+  <style>
+  body{
+    text-align: center;
+    background: #333;
+  }
+    #volume-meter {
+      width: 400px;
+      height: 50px;
+      background-color: #f0f0f0;
+      margin-top: 20px;
+    }
+    #instructies{
+      display: none;
+    }
+
+    #volume-level {
+      height: 100%;
+      background-color: #fa0;
+      width: 0%;
+    }
+    #volume-level {
+      width: 400px;
+      background-color: #a80;
+      width: 0%;
+    }
+    #tekst
+    {
+      color: #f80;
+    }
+  </style>
+</head>
+<body>
+  <video id="cake-video" width="400" height="300" loop>
+    <source src="verjaardag.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+<br>
+  <div id="instructies">
+      <h1 id="tekst">Blaas de kaarsjes uit!</h1>
+      <div id="volume-meter">
+        <div id="volume-level"></div>
+      </div>
+  </div>
+
+  <script>
+    let video = document.getElementById('cake-video');
+    let text = document.getElementById('tekst');
+    let volumeLevel = document.getElementById('volume-level');
+    let state="first-loop";
+    var time_blowing=0;
+    
+    var checkMicrophone=null;
+    
+    function animate()
+    {
+      console.log(state);
+      switch(state)
+      {
+        case "first-loop":
+          if (video.currentTime>8)
+          {
+            state="second-loop";
+            instructies.style.display="inline-block";
+          }
+          break;
+        case "second-loop":
+          if (video.currentTime>8)  video.currentTime = 6;
+          checkMicrophone();
+          break;
+        case "goon":
+            instructies.style.display="none";
+          break;
+      }
+      window.requestAnimationFrame(animate);
+    }
+    
+    
+    // Function to play/pause the video based on microphone input
+    function toggleVideoPlay(isBlowing) {
+      console.log(isBlowing);
+      if (isBlowing) {
+        time_blowing++;
+        console.log(time_blowing);
+      }
+      
+      if(time_blowing>0)
+      {
+        if(time_blowing<50)
+        {
+          text.innerHTML="harder!!!";
+        }else
+        {
+            state="goon";
+            video.currentTime = 9;
+
+        }
+      }
+      
+    }
+    
+    // Microphone input handling
+    video.style.display="none";
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        const audioContext = new AudioContext();
+        const microphone = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        
+        const bufferSize = 2048;
+        const buffer = new Float32Array(bufferSize);
+        
+        analyser.fftSize = 2048;
+        microphone.connect(analyser);
+        console.log("you said it´s ok");
+        video.style.display="";
+        video.play();
+        
+        function cm() {
+          analyser.getFloatTimeDomainData(buffer);
+          let rms = 0;
+          for (let i = 0; i < bufferSize; i++) {
+            rms += buffer[i] * buffer[i];
+          }
+          rms = Math.sqrt(rms / bufferSize);
+          
+          // Adjust this threshold value as needed for sensitivity
+          const threshold = 0.3;
+          if (rms > threshold) {
+            toggleVideoPlay(true);
+          } else {
+            toggleVideoPlay(false);
+          }
+          
+          // Update volume meter
+          const volume = Math.min(100, rms * 1000);
+          volumeLevel.style.width = volume + '%';
+          
+        }
+        checkMicrophone=cm;
+        animate();
+        
+      })
+      .catch(error => {
+        console.error('Error accessing microphone:', error);
+      });
+  </script>
+</body>
+</html>
