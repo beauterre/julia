@@ -14,13 +14,11 @@
     background: #333;
   }
     #cake-video {
-    width: 100%;
-    height: 100%;
+    width: 400px;
     }
     
     #volume-meter {
-      width: 100%;
-      min-width: 400px;
+      width: 400px;
       height: 50px;
       background-color: #f0f0f0;
       margin-top: 20px;
@@ -118,7 +116,7 @@
       
       if(time_blowing>0)
       {
-        if(time_blowing<40)
+        if(time_blowing<25)
         {
           text.innerHTML="harder!!!";
         }else
@@ -164,7 +162,7 @@
             rms = Math.sqrt(rms / bufferSize);
             
             // Adjust this threshold value as needed for sensitivity
-            const threshold = 0.3;
+            const threshold = 0.2;
             if (rms > threshold) {
               toggleVideoPlay(true);
             } else {
