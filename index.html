@@ -35,7 +35,8 @@
   </style>
 </head>
 <body>
-  <video id="cake-video" width="400" height="300" loop>
+  <img id="intro" src="hjalmark.png" width="100%">;
+  <video id="cake-video" width="400" height="400">
     <source src="verjaardag.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
@@ -105,49 +106,54 @@
     
     // Microphone input handling
     video.style.display="none";
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        const audioContext = new AudioContext();
-        const microphone = audioContext.createMediaStreamSource(stream);
-        const analyser = audioContext.createAnalyser();
-        
-        const bufferSize = 2048;
-        const buffer = new Float32Array(bufferSize);
-        
-        analyser.fftSize = 2048;
-        microphone.connect(analyser);
-        console.log("you said it´s ok");
-        video.style.display="";
-        video.play();
-        
-        function cm() {
-          analyser.getFloatTimeDomainData(buffer);
-          let rms = 0;
-          for (let i = 0; i < bufferSize; i++) {
-            rms += buffer[i] * buffer[i];
+    function init()
+    {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          const audioContext = new AudioContext();
+          const microphone = audioContext.createMediaStreamSource(stream);
+          const analyser = audioContext.createAnalyser();
+          
+          const bufferSize = 2048;
+          const buffer = new Float32Array(bufferSize);
+          
+          analyser.fftSize = 2048;
+          microphone.connect(analyser);
+          console.log("you said it´s ok");
+          video.style.display="";
+          intro.style.display="none";
+          video.play();
+          
+          function cm() {
+            analyser.getFloatTimeDomainData(buffer);
+            let rms = 0;
+            for (let i = 0; i < bufferSize; i++) {
+              rms += buffer[i] * buffer[i];
+            }
+            rms = Math.sqrt(rms / bufferSize);
+            
+            // Adjust this threshold value as needed for sensitivity
+            const threshold = 0.3;
+            if (rms > threshold) {
+              toggleVideoPlay(true);
+            } else {
+              toggleVideoPlay(false);
+            }
+            
+            // Update volume meter
+            const volume = Math.min(100, rms * 1000);
+            volumeLevel.style.width = volume + '%';
+            
           }
-          rms = Math.sqrt(rms / bufferSize);
+          checkMicrophone=cm;
+          animate();
           
-          // Adjust this threshold value as needed for sensitivity
-          const threshold = 0.3;
-          if (rms > threshold) {
-            toggleVideoPlay(true);
-          } else {
-            toggleVideoPlay(false);
-          }
-          
-          // Update volume meter
-          const volume = Math.min(100, rms * 1000);
-          volumeLevel.style.width = volume + '%';
-          
-        }
-        checkMicrophone=cm;
-        animate();
-        
-      })
-      .catch(error => {
-        console.error('Error accessing microphone:', error);
-      });
+        })
+        .catch(error => {
+          console.error('Error accessing microphone:', error);
+        });
+    }
+    setTimeout(init,2000);
   </script>
 </body>
 </html>
