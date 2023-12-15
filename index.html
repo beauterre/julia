@@ -14,12 +14,13 @@
     background: #333;
   }
     #cake-video {
-      width: 400px;
-      height: 400px;
+    width: 100%;
+    height: 100%;
     }
     
     #volume-meter {
       width: 100%;
+      min-width: 400px;
       height: 50px;
       background-color: #f0f0f0;
       margin-top: 20px;
@@ -34,7 +35,7 @@
       width: 0%;
     }
     #volume-level {
-      width: 400px;
+      width: 100%;
       background-color: #a80;
       width: 0%;
     }
@@ -112,12 +113,12 @@
       console.log(isBlowing);
       if (isBlowing) {
         time_blowing++;
-        console.log(time_blowing);
+        console.log("time: "+time_blowing);
       }
       
       if(time_blowing>0)
       {
-        if(time_blowing<50)
+        if(time_blowing<40)
         {
           text.innerHTML="harder!!!";
         }else
