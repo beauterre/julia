@@ -166,6 +166,8 @@
           
         })
         .catch(error => {
+          text.innerHTML="sorry, ik heb je microfoon nodig";
+            instructies.style.display="inline-block";
           console.error('Error accessing microphone:', error);
         });
     }
