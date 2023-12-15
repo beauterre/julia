@@ -13,6 +13,11 @@
     text-align: center;
     background: #333;
   }
+    #cake-video {
+      width: 400px;
+      height: 400px;
+    }
+    
     #volume-meter {
       width: 100%;
       height: 50px;
@@ -57,11 +62,11 @@
    <div id="intro">
     <img  src="hjalmark.png" width="100%">;
   </div>
-  <video id="cake-video" width="100%" >
-    <source src="verjaardag.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-<br>
+    <video id="cake-video" loop>
+      <source src="verjaardag.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  <br>
   <div id="instructies">
       <h1 id="tekst">Blaas de kaarsjes uit!</h1>
       <div id="volume-meter">
@@ -127,6 +132,10 @@
     
     // Microphone input handling
     video.style.display="none";
+    max=window.innerHeight-50;
+    if(window.innerWidth<max) max=window.innerWidth;
+    video.width=max+"px";
+    video.height=max+"px";
     function init()
     {
       navigator.mediaDevices.getUserMedia({ audio: true })
