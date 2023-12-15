@@ -28,6 +28,20 @@
       background-color: #a80;
       width: 0%;
     }
+    #intro{
+       position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    #intro img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
     #tekst
     {
       color: #f80;
@@ -35,7 +49,9 @@
   </style>
 </head>
 <body>
-  <img id="intro" src="hjalmark.png" width="100%">;
+   <div class="intro">
+    <img  src="hjalmark.png" width="100%">;
+  </div>
   <video id="cake-video" width="400" height="400">
     <source src="verjaardag.mp4" type="video/mp4">
     Your browser does not support the video tag.
