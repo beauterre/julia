@@ -75,6 +75,7 @@
         <div id="volume-level"></div>
       </div>
   </div>
+  <button id="escape" style="padding: 15px; font-size: 2em; display:none; position: fixed; top:0; left:0;" id="escape">OK, er gaat iets fout, sorry, je mag ook hier klikken</button>
 
   <script>
     let video = document.getElementById('cake-video');
@@ -195,6 +196,25 @@
         });
     }
     setTimeout(init,2000);
+    setTimeout(showEscape,20000);
+    
+    function goOn()
+    {
+       state="goon";
+        video.currentTime = 9;
+      let esc=document.getElementById("escape");
+      esc.style.display="none";
+      
+    }
+    function showEscape()
+    {
+      if(video.currentTime<8)
+      {
+        let esc=document.getElementById("escape");
+        esc.style.display="block";
+        esc.addEventListener("click",goOn);
+      }
+    }
   </script>
 </body>
 </html>
