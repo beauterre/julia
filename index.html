@@ -9,19 +9,21 @@
     <meta charset="UTF-8">
   <title>Birthday E-card</title>
   <style>
+  html,
   body{
     text-align: center;
     background: #333;
+    margin:10px;
+    padding:10px;
   }
-    #cake-video {
-    width: 400px;
-    }
-    
+  
     #volume-meter {
       width: 400px;
       height: 50px;
-      background-color: #f0f0f0;
+      background-color: #888;
       margin-top: 20px;
+      border-radius: 50px;
+      overflow: hidden;
     }
     #instructies{
       display: none;
@@ -30,10 +32,11 @@
     #volume-level {
       height: 100%;
       background-color: #fa0;
+      border-radius: 20px;
       width: 0%;
     }
     #volume-level {
-      width: 100%;
+      width: 400px;
       background-color: #a80;
       width: 0%;
     }
@@ -59,13 +62,13 @@
 </head>
 <body>
    <div id="intro">
-    <img  src="hjalmark.png" width="100%">;
+    <img  src="hjalmark.png" width="100%">
   </div>
-    <video id="cake-video" loop>
-      <source src="verjaardag.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  <br>
+  <video id="cake-video" >
+    <source src="verjaardag.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+<br>
   <div id="instructies">
       <h1 id="tekst">Blaas de kaarsjes uit!</h1>
       <div id="volume-meter">
@@ -111,12 +114,21 @@
       console.log(isBlowing);
       if (isBlowing) {
         time_blowing++;
-        console.log("time: "+time_blowing);
+        if(time_blowing%10<5)
+        {
+          volumeLevel.style.background="#a80";
+        }else
+        {
+          volumeLevel.style.background="#ca8";
+          
+        }
+        console.log(time_blowing);
       }
       
       if(time_blowing>0)
       {
-        if(time_blowing<25)
+        console.log(time_blowing);
+        if(time_blowing<30)
         {
           text.innerHTML="harder!!!";
         }else
@@ -131,10 +143,6 @@
     
     // Microphone input handling
     video.style.display="none";
-    max=window.innerHeight-50;
-    if(window.innerWidth<max) max=window.innerWidth;
-    video.width=max+"px";
-    video.height=max+"px";
     function init()
     {
       navigator.mediaDevices.getUserMedia({ audio: true })
@@ -150,6 +158,7 @@
           microphone.connect(analyser);
           console.log("you said it´s ok");
           video.style.display="";
+          video.volume=0.30;
           intro.style.display="none";
           video.play();
           
@@ -162,7 +171,7 @@
             rms = Math.sqrt(rms / bufferSize);
             
             // Adjust this threshold value as needed for sensitivity
-            const threshold = 0.2;
+            const threshold = 0.25;
             if (rms > threshold) {
               toggleVideoPlay(true);
             } else {
@@ -181,6 +190,7 @@
         .catch(error => {
           text.innerHTML="sorry, ik heb je microfoon nodig";
             instructies.style.display="inline-block";
+            intro.style.display="none";
           console.error('Error accessing microphone:', error);
         });
     }
